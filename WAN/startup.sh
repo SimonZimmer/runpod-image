@@ -36,7 +36,7 @@ if ! check_model "${PERSISTENT_MODELS_PATH}/text_encoders/umt5_xxl_fp8_e4m3fn_sc
         https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors
     echo "✅ UMT5 text encoder downloaded"
 else
-    echo "✅ UMT5 text encoder already exists"
+    echo "✅ UMT5 text encoder already exists on persistent volume"
 fi
 
 # VAE
@@ -47,7 +47,7 @@ if ! check_model "${PERSISTENT_MODELS_PATH}/vae/wan_2.1_vae.safetensors"; then
         https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors
     echo "✅ WAN VAE downloaded"
 else
-    echo "✅ WAN VAE already exists"
+    echo "✅ WAN VAE already exists on persistent volume"
 fi
 
 # High Noise Diffusion Model
@@ -58,7 +58,7 @@ if ! check_model "${PERSISTENT_MODELS_PATH}/diffusion_models/wan2.2_i2v_high_noi
         https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors
     echo "✅ High noise diffusion model downloaded"
 else
-    echo "✅ High noise diffusion model already exists"
+    echo "✅ High noise diffusion model already exists on persistent volume"
 fi
 
 # Low Noise Diffusion Model
@@ -69,7 +69,7 @@ if ! check_model "${PERSISTENT_MODELS_PATH}/diffusion_models/wan2.2_i2v_low_nois
         https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors
     echo "✅ Low noise diffusion model downloaded"
 else
-    echo "✅ Low noise diffusion model already exists"
+    echo "✅ Low noise diffusion model already exists on persistent volume"
 fi
 
 # LightX2V LoRA - Low Noise (use smaller size check for LoRAs - 10MB)
@@ -80,7 +80,7 @@ if ! check_model "${PERSISTENT_MODELS_PATH}/loras/wan2.2_i2v_lightx2v_4steps_lor
         https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors
     echo "✅ LightX2V low noise LoRA downloaded"
 else
-    echo "✅ LightX2V low noise LoRA already exists"
+    echo "✅ LightX2V low noise LoRA already exists on persistent volume"
 fi
 
 # LightX2V LoRA - High Noise
@@ -91,7 +91,7 @@ if ! check_model "${PERSISTENT_MODELS_PATH}/loras/wan2.2_i2v_lightx2v_4steps_lor
         https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors
     echo "✅ LightX2V high noise LoRA downloaded"
 else
-    echo "✅ LightX2V high noise LoRA already exists"
+    echo "✅ LightX2V high noise LoRA already exists on persistent volume"
 fi
 
 echo ""
@@ -129,6 +129,4 @@ find "${PERSISTENT_MODELS_PATH}" -name "*.safetensors" -exec ls -lh {} \; | awk 
 echo ""
 echo "🔍 Verifying symlink in ComfyUI:"
 ls -la "${ACTUAL_COMFY_PATH}/" | grep models
-
 echo ""
-echo "💡 Note: Models are stored on your persistent volume and will survive pod restarts!"
