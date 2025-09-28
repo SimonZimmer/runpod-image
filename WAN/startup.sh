@@ -77,7 +77,7 @@ echo "⚡ Checking LightX2V low noise LoRA..."
 if ! check_model "${PERSISTENT_MODELS_PATH}/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors" 10485760; then
     echo "⬇️  Downloading LightX2V low noise LoRA..."
     wget -P "${PERSISTENT_MODELS_PATH}/loras" \
-        https://huggingface.co/kijai/LightX2V-ComfyUI/resolve/main/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors
+        https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors
     echo "✅ LightX2V low noise LoRA downloaded"
 else
     echo "✅ LightX2V low noise LoRA already exists"
@@ -88,35 +88,23 @@ echo "⚡ Checking LightX2V high noise LoRA..."
 if ! check_model "${PERSISTENT_MODELS_PATH}/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors" 10485760; then
     echo "⬇️  Downloading LightX2V high noise LoRA..."
     wget -P "${PERSISTENT_MODELS_PATH}/loras" \
-        https://huggingface.co/kijai/LightX2V-ComfyUI/resolve/main/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors
+        https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors
     echo "✅ LightX2V high noise LoRA downloaded"
 else
     echo "✅ LightX2V high noise LoRA already exists"
 fi
 
 echo ""
-echo "🔗 Creating symlinks from ComfyUI to persistent storage..."
+echo "🔗 Creating symlink for models directory..."
 
-# Ensure ComfyUI models directory exists
-mkdir -p "${ACTUAL_COMFY_PATH}/models"
+# Remove any existing models directory at ComfyUI location
+rm -rf "${ACTUAL_COMFY_PATH}/models"
 
-# Remove any existing symlinks/directories at ComfyUI location
-rm -rf "${ACTUAL_COMFY_PATH}/models/text_encoders"
-rm -rf "${ACTUAL_COMFY_PATH}/models/diffusion_models"
-rm -rf "${ACTUAL_COMFY_PATH}/models/vae"
-rm -rf "${ACTUAL_COMFY_PATH}/models/loras"
+# Create a single symlink for the entire models directory
+ln -sf "${PERSISTENT_MODELS_PATH}" "${ACTUAL_COMFY_PATH}/models"
 
-# Create symlinks from ComfyUI to persistent storage
-ln -sf "${PERSISTENT_MODELS_PATH}/text_encoders" "${ACTUAL_COMFY_PATH}/models/text_encoders"
-ln -sf "${PERSISTENT_MODELS_PATH}/diffusion_models" "${ACTUAL_COMFY_PATH}/models/diffusion_models"
-ln -sf "${PERSISTENT_MODELS_PATH}/vae" "${ACTUAL_COMFY_PATH}/models/vae"
-ln -sf "${PERSISTENT_MODELS_PATH}/loras" "${ACTUAL_COMFY_PATH}/models/loras"
-
-echo "✅ Symlinks created:"
-echo "   ${ACTUAL_COMFY_PATH}/models/text_encoders -> ${PERSISTENT_MODELS_PATH}/text_encoders"
-echo "   ${ACTUAL_COMFY_PATH}/models/diffusion_models -> ${PERSISTENT_MODELS_PATH}/diffusion_models"
-echo "   ${ACTUAL_COMFY_PATH}/models/vae -> ${PERSISTENT_MODELS_PATH}/vae"
-echo "   ${ACTUAL_COMFY_PATH}/models/loras -> ${PERSISTENT_MODELS_PATH}/loras"
+echo "✅ Symlink created:"
+echo "   ${ACTUAL_COMFY_PATH}/models -> ${PERSISTENT_MODELS_PATH}"
 
 echo ""
 echo "🎉 All WAN 2.2 models ready!"
@@ -137,10 +125,10 @@ echo ""
 echo "📊 Model file sizes:"
 find "${PERSISTENT_MODELS_PATH}" -name "*.safetensors" -exec ls -lh {} \; | awk '{print $5 " " $9}' | sort
 
-# Verify symlinks work
+# Verify symlink works
 echo ""
-echo "🔍 Verifying symlinks in ComfyUI:"
-ls -la "${ACTUAL_COMFY_PATH}/models/"
+echo "🔍 Verifying symlink in ComfyUI:"
+ls -la "${ACTUAL_COMFY_PATH}/" | grep models
 
 echo ""
 echo "💡 Note: Models are stored on your persistent volume and will survive pod restarts!"
